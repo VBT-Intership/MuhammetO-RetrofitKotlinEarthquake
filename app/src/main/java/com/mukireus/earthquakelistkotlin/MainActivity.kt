@@ -1,6 +1,7 @@
 package com.mukireus.earthquakelistkotlin
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,16 +18,22 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
-    private var quakeList: ArrayList<EarthquakeModel>? = null
-    private var quakeDataAdapter: QuakeDataAdapter? = null
+    private lateinit var quakeDataAdapter: QuakeDataAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        setupRecyclerView()
         val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this)
         recycler_view.layoutManager = layoutManager
         fetchData()
+
+    }
+
+    private fun setupRecyclerView() {
+        quakeDataAdapter = QuakeDataAdapter(null)
+        recycler_view.adapter = quakeDataAdapter
+        recycler_view.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
     }
 
     private fun fetchData() {
@@ -39,27 +46,29 @@ class MainActivity : AppCompatActivity() {
         val call = service.getHttpEarthquakeList()
 
 
-        call.enqueue(object : Callback<List<EarthquakeModel>> {
-            override fun onFailure(call: Call<List<EarthquakeModel>>, t: Throwable) {
-                t.printStackTrace()
+        call.enqueue(object : Callback<EarthquakeModel> {
+            override fun onFailure(call: Call<EarthquakeModel>, t: Throwable) {
+                Log.e("Respons", "${t.message}")
             }
 
             override fun onResponse(
-                call: Call<List<EarthquakeModel>>,
-                response: Response<List<EarthquakeModel>>
+                call: Call<EarthquakeModel>,
+                response: Response<EarthquakeModel>
             ) {
                 if (response.isSuccessful) {
-                    Toast.makeText(this@MainActivity, "Successful!", Toast.LENGTH_SHORT).show()
-                    response.body()?.let {
+                    Toast.makeText(this@MainActivity, "${response.body()}!", Toast.LENGTH_SHORT).show()
+                    Log.e("Response", "${response.body()}")
+                    quakeDataAdapter.dataList= response.body()!!
+                    quakeDataAdapter.notifyDataSetChanged()
+                    /*response.body()?.let {
                         quakeList = ArrayList(it)
                         quakeList?.let {
                             quakeDataAdapter = QuakeDataAdapter(it)
                             recycler_view.adapter = quakeDataAdapter
                         }
-                    }
+                    }*/
                 }
             }
-
         })
     }
 }

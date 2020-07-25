@@ -12,7 +12,7 @@ import com.mukireus.earthquakelistkotlin.R
 import kotlinx.android.synthetic.main.earthquake_list_card.view.*
 
 class QuakeDataAdapter(
-    private var dataList: ArrayList<EarthquakeModel>
+    var dataList: EarthquakeModel?
 ) :
     RecyclerView.Adapter<QuakeDataAdapter.RowHolder>() {
     private val images: String =
@@ -20,9 +20,9 @@ class QuakeDataAdapter(
 
 
     class RowHolder(view: View) : RecyclerView.ViewHolder(view) {
-        fun bind(quakeModel: EarthquakeModel) {
+        /*fun bind(quakeModel: EarthquakeModel) {
             itemView.itemTitle.text = quakeModel.magnitude.toString()
-        }
+        }*/
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RowHolder {
@@ -32,11 +32,11 @@ class QuakeDataAdapter(
     }
 
     override fun getItemCount(): Int {
-        return dataList.size
+        return 1
     }
 
     override fun onBindViewHolder(holder: RowHolder, position: Int) {
-        holder.bind(dataList[position])
+        //holder.bind(dataList!!)
         holder.itemView.apply {
             Glide.with(this)
                 .load(images)
