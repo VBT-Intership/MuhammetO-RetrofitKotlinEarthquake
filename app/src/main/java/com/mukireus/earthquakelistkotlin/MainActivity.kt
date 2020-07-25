@@ -17,7 +17,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
-    private var quakeList: ArrayList<EarthquakeModel>? = null
+    var quakeList: ArrayList<EarthquakeModel>? = null
     private var quakeDataAdapter: QuakeDataAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity() {
 
         val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this)
         recycler_view.layoutManager = layoutManager
+        listOf(quakeDataAdapter)
         fetchData()
     }
 
@@ -54,6 +55,7 @@ class MainActivity : AppCompatActivity() {
                         quakeList = ArrayList(it)
                         quakeList?.let {
                             quakeDataAdapter = QuakeDataAdapter(it)
+//                            quakeDataAdapter.notifyDatSetChange
                             recycler_view.adapter = quakeDataAdapter
                         }
                     }

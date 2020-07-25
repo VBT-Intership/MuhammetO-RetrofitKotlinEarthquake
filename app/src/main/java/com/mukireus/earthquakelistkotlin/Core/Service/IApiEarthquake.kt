@@ -5,6 +5,6 @@ import retrofit2.Call
 import retrofit2.http.GET
 
 interface IApiEarthquake {
-    @GET("/http.all_day.geojson")
+    @GET("/all_day.geojson")
     fun getHttpEarthquakeList(): Call<List<EarthquakeModel>>
 }
