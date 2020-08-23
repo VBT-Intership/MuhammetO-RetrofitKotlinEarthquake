@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity() {
         setupRecyclerView()
         val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this)
         recycler_view.layoutManager = layoutManager
+        listOf(quakeDataAdapter)
         fetchData()
 
     }
@@ -64,6 +65,7 @@ class MainActivity : AppCompatActivity() {
                         quakeList = ArrayList(it)
                         quakeList?.let {
                             quakeDataAdapter = QuakeDataAdapter(it)
+//                            quakeDataAdapter.notifyDatSetChange
                             recycler_view.adapter = quakeDataAdapter
                         }
                     }*/
