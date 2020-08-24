@@ -1,18 +1,16 @@
 package com.mukireus.earthquakelistkotlin.UI
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.mukireus.earthquakelistkotlin.Core.Model.EarthquakeModel
+import com.mukireus.earthquakelistkotlin.Core.Model.Feature
 import com.mukireus.earthquakelistkotlin.R
 import kotlinx.android.synthetic.main.earthquake_list_card.view.*
 
 class QuakeDataAdapter(
-    var dataList: EarthquakeModel?
+    var dataList: List<Feature>
 ) :
     RecyclerView.Adapter<QuakeDataAdapter.RowHolder>() {
     private val images: String =
@@ -20,9 +18,10 @@ class QuakeDataAdapter(
 
 
     class RowHolder(view: View) : RecyclerView.ViewHolder(view) {
-        /*fun bind(quakeModel: EarthquakeModel) {
-            itemView.itemTitle.text = quakeModel.magnitude.toString()
-        }*/
+        fun bind(quakeModel: Feature) {
+            itemView.itemTitle.text = quakeModel.properties.mag.toString()
+            itemView.itemSubtitle.text = quakeModel.properties.place
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RowHolder {
@@ -32,16 +31,17 @@ class QuakeDataAdapter(
     }
 
     override fun getItemCount(): Int {
-        return 1
+        return dataList.size
     }
 
     override fun onBindViewHolder(holder: RowHolder, position: Int) {
-        //holder.bind(dataList!!)
+        holder.bind(dataList[position])
         holder.itemView.apply {
             Glide.with(this)
                 .load(images)
                 .into(image_view_item)
         }
+
     }
 
 

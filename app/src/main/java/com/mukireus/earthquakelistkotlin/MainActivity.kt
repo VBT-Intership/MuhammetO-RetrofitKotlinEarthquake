@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
-        quakeDataAdapter = QuakeDataAdapter(null)
+        quakeDataAdapter = QuakeDataAdapter(arrayListOf())
         recycler_view.adapter = quakeDataAdapter
         recycler_view.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
     }
@@ -56,19 +56,20 @@ class MainActivity : AppCompatActivity() {
                 call: Call<EarthquakeModel>,
                 response: Response<EarthquakeModel>
             ) {
+
                 if (response.isSuccessful) {
-                    Toast.makeText(this@MainActivity, "${response.body()}!", Toast.LENGTH_SHORT).show()
+
                     Log.e("Response", "${response.body()}")
-                    quakeDataAdapter.dataList= response.body()!!
-                    quakeDataAdapter.notifyDataSetChanged()
-                    /*response.body()?.let {
-                        quakeList = ArrayList(it)
-                        quakeList?.let {
-                            quakeDataAdapter = QuakeDataAdapter(it)
-//                            quakeDataAdapter.notifyDatSetChange
-                            recycler_view.adapter = quakeDataAdapter
-                        }
-                    }*/
+                    response.body()?.let {
+                        quakeDataAdapter.dataList = it.features
+                        quakeDataAdapter.notifyDataSetChanged()
+                        Toast.makeText(this@MainActivity, "${response.body()}!", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+                else{
+                    Toast.makeText(this@MainActivity, "NO", Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
         })
